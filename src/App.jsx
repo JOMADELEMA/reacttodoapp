@@ -4,12 +4,19 @@ import { useState } from "react";
 import Tarea from "./Components/Tarea";
 
 function App() {
-  const [tareas, setTareas] = useState([]);
-  const [contador, setContador] = useState(0);
-  const [pendientes, setPendientes] = useState(0);
+
+//Estado para almacenar todas las tareas y mostrarlas
+//la tarea es un array de objetos que almacena id, nombre y estado
+//el estado es true para pendiente y false para completada
+  const [tareas, setTareas] = useState([]); 
+
+
+//contador de tareas para el listado todal de tareas
+  const [contador, setContador] = useState(0); 
+  const [pendientes, setPendientes] = useState(0); //contador de tareas pendientes para el listado de pendientes
   var temp = contador;
 
-  // }
+  //funcion de Bootstrap para validar el formulario
   (function () {
     "use strict";
 
@@ -32,14 +39,16 @@ function App() {
     });
   })();
 
+
+  //funcion para obtener valor del formulario y agregar la tarea al listado
   const agregarTarea = (e) => {
     e.preventDefault();
 
-    const formTarea = e.target[0].value;
+    const formTarea = e.target[0].value; //valor obtenido del formulario
     if (formTarea === "") {
-      console.log("input vacio");
+      console.log("input vacio"); //verificar por que no valida cuando se hace el primer insert a la lista
     } else {
-      setTareas([...tareas, { id: contador, nombre: formTarea, estado: true }]);
+      setTareas([...tareas, { id: contador, nombre: formTarea, estado: true }]); 
       temp++;
       setContador(temp);
       document.getElementById("nuevaTarea").value = "";
@@ -47,6 +56,8 @@ function App() {
     }
   };
 
+  //funcion para eliminar la tarea del listado
+  //recibe el id de la tarea que se quiere eliminar
   function eliminarTarea(idTarea) {
     let nuevoListado = tareas.filter((tarea) => tarea.id !== idTarea);
     setTareas(nuevoListado);
@@ -56,6 +67,8 @@ function App() {
     }
   }
 
+  //funcion para completar las tareas
+  //recibe el id de la tarea que se ha de marcar|desmarcar como completada
   function completarTarea(idTarea) {
     let tareaCompletada = tareas.filter((tarea) => tarea.id === idTarea);
     let tareasSinCompletada = tareas.filter((tarea) => tarea.id !== idTarea);
@@ -77,6 +90,8 @@ function App() {
     setTareas([...tareasTemp]);
   }
 
+  //funcion que verifica el estado de la tarea
+  //recibe el id de tarea para verificar si su estado es completado o pendiente
   function verificarEstadoTarea(idVerificar) {
     let tareaTemp = tareas.filter((tarea) => tarea.id === idVerificar);
 
@@ -87,6 +102,7 @@ function App() {
     }
   }
 
+  //funcion que actualiza el listado de pendientes
   function actualizarPendientes(motivo) {
     //motivo es aumentar o disminuir
     let pendientesTemp = pendientes;
