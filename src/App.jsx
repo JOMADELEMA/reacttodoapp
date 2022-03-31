@@ -1,6 +1,5 @@
 import "./App.css";
 import { useState } from "react";
-import { Square, SquareCheck } from "tabler-icons-react";
 
 import Tarea from "./Components/Tarea";
 
@@ -26,7 +25,6 @@ function App() {
             event.preventDefault();
             event.stopPropagation();
           }
-
           form.classList.add("was-validated");
         },
         false
@@ -169,9 +167,16 @@ function App() {
                   <div className="d-flex">
                     <Tarea tarea={item} key={item.id} />
                     <button
+                      className="btn btn-outline-success"
+                      onClick={() => {
+                        completarTarea(item.id);
+                      }}
+                    >
+                      Completar
+                    </button>
+                    <button
                       className="btn btn-outline-danger"
                       onClick={() => {
-                        // console.log(item.id);
                         eliminarTarea(item.id);
                       }}
                     >
@@ -179,47 +184,6 @@ function App() {
                     </button>
                   </div>
                 </>
-                // <li
-                //   className="list-group-item list-group-item-action d-flex rounded"
-                //   key={item.id}
-                // >
-                //   {item.estado === true ? (
-                //     <Square className="align-self-center" size={25} />
-                //   ) : (
-                //     <SquareCheck className="align-self-center" size={25} />
-                //   )}
-                //   <div
-                //     className="align-self-center text-start ms-5 flex-fill"
-                //     style={{ userSelect: "none" }}
-                //     onClick={() => {
-                //       completarTarea(item.id);
-                //     }}
-                //   >
-                //     {item.estado === true ? (
-                //       <span className="">{item.nombre}</span>
-                //     ) : (
-                //       <span className="text-decoration-line-through">
-                //         {item.nombre}
-                //       </span>
-                //     )}
-                //   </div>
-                //   <button
-                //     className="btn btn-outline-success"
-                //     onClick={() => {
-                //       completarTarea(item.id);
-                //     }}
-                //   >
-                //     Completada
-                //   </button>
-                //   <button
-                //     className="btn btn-outline-danger"
-                //     onClick={() => {
-                //       eliminarTarea(item.id);
-                //     }}
-                //   >
-                //     Eliminar
-                //   </button>
-                // </li>
               ))}
             </ul>
           </div>
