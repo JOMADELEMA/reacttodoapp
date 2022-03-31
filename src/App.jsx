@@ -73,6 +73,10 @@ function App() {
   function eliminarTarea(idTarea) {
     let nuevoListado = tareas.filter((tarea) => tarea.id !== idTarea);
     setTareas(nuevoListado);
+    if (estadoLista===0){
+      setTareasTemp(nuevoListado);
+    }
+    
     let estadoTarea = verificarEstadoTarea(idTarea);
     if (estadoTarea === true) {
       actualizarPendientes(false);
