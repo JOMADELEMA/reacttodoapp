@@ -1,5 +1,7 @@
 import "./App.css";
 import { useState } from "react";
+import {X, Check, Plus} from 'tabler-icons-react';
+
 
 import Tarea from "./Components/Tarea";
 
@@ -74,6 +76,7 @@ function App() {
     let tareasSinCompletada = tareas.filter((tarea) => tarea.id !== idTarea);
     let tareasTemp = tareas;
     setTareas(tareasSinCompletada);
+    console.log(idTarea);
 
     tareasTemp.map((item) => {
       if (item.id === tareaCompletada[0].id) {
@@ -142,7 +145,7 @@ function App() {
                   required
                 />
                 <button className="btn btn-outline-primary" type="submit">
-                  Agregar Tarea
+                  <Plus size={25}/>
                 </button>
               </div>
             </form>
@@ -181,22 +184,24 @@ function App() {
               {tareas.map((item) => (
                 <>
                   <div className="d-flex">
-                    <Tarea tarea={item} key={item.id} />
+                    <div className="flex-fill" onClick={()=>{completarTarea(item.id)}}>
+
+                    <Tarea tarea={item}  />
+                    </div>
                     <button
                       className="btn btn-outline-success"
                       onClick={() => {
                         completarTarea(item.id);
                       }}
                     >
-                      Completar
+                      <Check size={25}/>
                     </button>
                     <button
                       className="btn btn-outline-danger"
                       onClick={() => {
                         eliminarTarea(item.id);
                       }}
-                    >
-                      Eliminar
+                    >                     <X size={25} />                      
                     </button>
                   </div>
                 </>

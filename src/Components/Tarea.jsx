@@ -10,17 +10,17 @@ function Tarea(props) {
         className="list-group-item list-group-item-action d-flex rounded"
       >
         {tarea.estado === true ? (
-          <Square className="align-self-center" size={25} />
+          <Square className="align-self-center" size={30} />
         ) : (
-          <SquareCheck className="align-self-center" size={25} />
+          <SquareCheck className="align-self-center" size={30} />
         )}
         <div
           className="align-self-center text-start ms-5 flex-fill"
           style={{ userSelect: "none" }}
-          onClick={() => {
-            console.log(tarea.id)
-            //completarTarea(tarea.id);
-          }}
+          // onClick={() => {
+          //   console.log(tarea.id)
+          //   //completarTarea(tarea.id);
+          // }}
         >
           {tarea.estado === true ? (
             <span className="">{tarea.nombre}</span>
