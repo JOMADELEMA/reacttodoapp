@@ -1,20 +1,27 @@
 import "./App.css";
 import { useState } from "react";
-import {X, Check, Plus} from 'tabler-icons-react';
-
+import {
+  X,
+  Check,
+  Plus,
+  Notes,
+  List,
+  ListCheck,
+  ListDetails,
+} from "tabler-icons-react";
 
 import Tarea from "./Components/Tarea";
 
 function App() {
+  //Estado para almacenar todas las tareas y mostrarlas
+  //la tarea es un array de objetos que almacena id, nombre y estado
+  //el estado es true para pendiente y false para completada
+  const [tareas, setTareas] = useState([]);
+  const [tareasTemp, setTareasTemp] = useState([]);
+  const [estadoLista, setEstadoLista] = useState(0); //se pondrán 3 valores 0 = todos, 1 = pendientes y 2 = completados
 
-//Estado para almacenar todas las tareas y mostrarlas
-//la tarea es un array de objetos que almacena id, nombre y estado
-//el estado es true para pendiente y false para completada
-  const [tareas, setTareas] = useState([]); 
-
-
-//contador de tareas para el listado todal de tareas
-  const [contador, setContador] = useState(0); 
+  //contador de tareas para el listado todal de tareas
+  const [contador, setContador] = useState(0);
   const [pendientes, setPendientes] = useState(0); //contador de tareas pendientes para el listado de pendientes
   var temp = contador;
 
@@ -41,7 +48,6 @@ function App() {
     });
   })();
 
-
   //funcion para obtener valor del formulario y agregar la tarea al listado
   const agregarTarea = (e) => {
     e.preventDefault();
@@ -50,7 +56,11 @@ function App() {
     if (formTarea === "") {
       console.log("input vacio"); //verificar por que no valida cuando se hace el primer insert a la lista
     } else {
-      setTareas([...tareas, { id: contador, nombre: formTarea, estado: true }]); 
+      setTareas([...tareas, { id: contador, nombre: formTarea, estado: true }]);
+      setTareasTemp([
+        ...tareas,
+        { id: contador, nombre: formTarea, estado: true },
+      ]);
       temp++;
       setContador(temp);
       document.getElementById("nuevaTarea").value = "";
@@ -73,12 +83,12 @@ function App() {
   //recibe el id de la tarea que se ha de marcar|desmarcar como completada
   function completarTarea(idTarea) {
     let tareaCompletada = tareas.filter((tarea) => tarea.id === idTarea);
-    let tareasSinCompletada = tareas.filter((tarea) => tarea.id !== idTarea);
-    let tareasTemp = tareas;
-    setTareas(tareasSinCompletada);
-    console.log(idTarea);
+    //let tareasSinCompletada = tareas.filter((tarea) => tarea.id !== idTarea);
+    let tareasTemporal = tareas;
+    //setTareas(tareasSinCompletada);
+    //console.log(idTarea);
 
-    tareasTemp.map((item) => {
+    tareasTemporal.map((item) => {
       if (item.id === tareaCompletada[0].id) {
         if (item.estado === true) {
           item.estado = false;
@@ -89,8 +99,6 @@ function App() {
         }
       }
     });
-
-    setTareas([...tareasTemp]);
   }
 
   //funcion que verifica el estado de la tarea
@@ -123,12 +131,53 @@ function App() {
     setPendientes(pendientesTemp);
   }
 
+  function listarTareas() {
+    setTareas([...tareasTemp]);
+    setEstadoLista(0);
+  }
+
+  function listarTareasPendientes() {
+    let listadoTareas;
+    if (estadoLista === 0) {
+      listadoTareas = tareas.filter((tarea) => tarea.estado === true);
+      setTareas([...listadoTareas]);
+      setEstadoLista(1);
+    }
+    if (estadoLista === 1) {
+      setTareas([...tareasTemp]);
+      setEstadoLista(0);
+    }
+    if (estadoLista === 2) {
+      listadoTareas = tareasTemp.filter((tarea) => tarea.estado === true);
+      setTareas([...listadoTareas]);
+      setEstadoLista(1);
+    }
+  }
+
+  function listarTareasCompletadas() {
+    let listadoTareas;
+    if (estadoLista === 0) {
+      listadoTareas = tareas.filter((tarea) => tarea.estado === false);
+      setTareas([...listadoTareas]);
+      setEstadoLista(2);
+    }
+    if (estadoLista === 1) {
+      listadoTareas = tareasTemp.filter((tarea) => tarea.estado === false);
+      setTareas([...listadoTareas]);
+      setEstadoLista(2);
+    }
+    if (estadoLista === 2) {
+      setTareas([...tareasTemp]);
+      setEstadoLista(0);
+    }
+  }
+
   return (
     <>
-      <div className="container-fluid text-center">
-        <h1 className="">Tareas</h1>
+      <div className="container text-center">
+        <h1 className="m-3">Tareas</h1>
 
-        <div className="row">
+        <div className="row mt-5 mb-3">
           <div className="col-1"></div>
           <div className="col-10">
             <form
@@ -145,7 +194,7 @@ function App() {
                   required
                 />
                 <button className="btn btn-outline-primary" type="submit">
-                  <Plus size={25}/>
+                  <Plus size={25} />
                 </button>
               </div>
             </form>
@@ -155,6 +204,83 @@ function App() {
         <hr />
 
         <div className="row">
+          <div className="col-1"> </div>
+          <div className="col-10 d-flex justify-content-evenly">
+            <button
+              className="btn btn-outline-primary align-self-center"
+              onClick={() => {
+                listarTareas();
+              }}
+            >
+              <List className="me-2" size={25} />
+              Todas
+            </button>
+            <button
+              className="btn btn-outline-success align-self-center"
+              onClick={() => {
+                listarTareasCompletadas();
+              }}
+            >
+              <ListCheck className="me-2" size={25} />
+              Completadas
+            </button>
+            <button
+              className="btn btn-outline-danger align-self-center"
+              onClick={() => {
+                listarTareasPendientes();
+              }}
+            >
+              <ListDetails className="me-2" size={25} />
+              Pendientes
+            </button>
+          </div>
+          <div className="col-1"> </div>
+        </div>
+
+        <hr />
+        <div className="row">
+          <div className="col-1"></div>
+          <div className="col-10">
+            <ul className="list-group" id="listadoTareas">
+              {tareas.map((item) => (
+                <>
+                  <div className="d-flex">
+                    <div
+                      className="flex-fill"
+                      onClick={() => {
+                        completarTarea(item.id);
+                      }}
+                    >
+                      <Tarea tarea={item} />
+                    </div>
+                    {/* <button
+                      className="btn btn-outline-success"
+                      onClick={() => {
+                        completarTarea(item.id);
+                      }}
+                    >
+                      <Check size={25} />
+                    </button> */}
+                    <button
+                      className="btn btn-outline-danger"
+                      onClick={() => {
+                        eliminarTarea(item.id);
+                      }}
+                    >
+                      {" "}
+                      <X size={25} />
+                    </button>
+                  </div>
+                </>
+              ))}
+            </ul>
+          </div>
+          <div className="col-1"></div>
+        </div>
+      </div>
+
+      <footer className="footer mt-5 py-3">
+        <div className="row flex-fill text-center align-self-baseline">
           <div className="col">
             <h4>
               Tareas Totales:
@@ -176,41 +302,7 @@ function App() {
             </h4>
           </div>
         </div>
-        <hr />
-        <div className="row">
-          <div className="col-1"></div>
-          <div className="col-10">
-            <ul className="list-group" id="listadoTareas">
-              {tareas.map((item) => (
-                <>
-                  <div className="d-flex">
-                    <div className="flex-fill" onClick={()=>{completarTarea(item.id)}}>
-
-                    <Tarea tarea={item}  />
-                    </div>
-                    <button
-                      className="btn btn-outline-success"
-                      onClick={() => {
-                        completarTarea(item.id);
-                      }}
-                    >
-                      <Check size={25}/>
-                    </button>
-                    <button
-                      className="btn btn-outline-danger"
-                      onClick={() => {
-                        eliminarTarea(item.id);
-                      }}
-                    >                     <X size={25} />                      
-                    </button>
-                  </div>
-                </>
-              ))}
-            </ul>
-          </div>
-          <div className="col-1"></div>
-        </div>
-      </div>
+      </footer>
     </>
   );
 }
