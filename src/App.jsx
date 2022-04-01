@@ -8,6 +8,10 @@ import {
   List,
   ListCheck,
   ListDetails,
+  Circle,
+  CircleCheck,
+  Square,
+  SquareCheck,
 } from "tabler-icons-react";
 
 import Tarea from "./Components/Tarea";
@@ -73,10 +77,10 @@ function App() {
   function eliminarTarea(idTarea) {
     let nuevoListado = tareas.filter((tarea) => tarea.id !== idTarea);
     setTareas(nuevoListado);
-    if (estadoLista===0){
+    if (estadoLista === 0) {
       setTareasTemp(nuevoListado);
     }
-    
+
     let estadoTarea = verificarEstadoTarea(idTarea);
     if (estadoTarea === true) {
       actualizarPendientes(false);
@@ -102,6 +106,39 @@ function App() {
           actualizarPendientes(true);
         }
       }
+    });
+  }
+
+  function marcarTodasCompletas() {
+    let tareasTemporal = tareas;
+    //setTareas(tareasSinCompletada);
+    //console.log(idTarea);
+
+    tareasTemporal.map((item) => {
+      if (item.estado === true) {
+        item.estado = false;
+        actualizarPendientes(false);
+      }
+      // else {
+      //   item.estado = true;
+      //   actualizarPendientes(true);
+      // }
+    });
+  }
+  function marcarTodasPendientes() {
+    let tareasTemporal = tareas;
+    //setTareas(tareasSinCompletada);
+    //console.log(idTarea);
+
+    tareasTemporal.map((item) => {
+      if (item.estado === false) {
+        item.estado = true;
+        actualizarPendientes(true);
+      }
+      // else {
+      //   item.estado = false;
+      //   actualizarPendientes(false);
+      // }
     });
   }
 
@@ -216,7 +253,7 @@ function App() {
                 listarTareas();
               }}
             >
-              <List className="me-2" size={25} />
+              <List className="me-2" size={25} strokeWidth={1}/>
               Todas
             </button>
             <button
@@ -225,7 +262,7 @@ function App() {
                 listarTareasCompletadas();
               }}
             >
-              <ListCheck className="me-2" size={25} />
+              <ListCheck className="me-2" size={25} strokeWidth={1}/>
               Completadas
             </button>
             <button
@@ -234,7 +271,7 @@ function App() {
                 listarTareasPendientes();
               }}
             >
-              <ListDetails className="me-2" size={25} />
+              <ListDetails className="me-2" size={25} strokeWidth={1}/>
               Pendientes
             </button>
           </div>
@@ -272,7 +309,7 @@ function App() {
                       }}
                     >
                       {" "}
-                      <X size={25} />
+                      <X size={25} strokeWidth={1}/>
                     </button>
                   </div>
                 </>
@@ -281,7 +318,33 @@ function App() {
           </div>
           <div className="col-1"></div>
         </div>
+
+      <div className="row mt-5">
+          <div className="col-1"></div>
+          <div className="col-10 d-flex justify-content-evenly">
+            <button
+              className="btn btn-outline-info align-self-center"
+              onClick={() => {
+                marcarTodasCompletas();
+              }}
+            >
+              <SquareCheck className="me-2" size={25} strokeWidth={1}/>
+              Marcar Todas
+            </button>
+            <button
+              className="btn btn-outline-secondary align-self-center"
+              onClick={() => {
+                marcarTodasPendientes();
+              }}
+            >
+              <Square className="me-2" size={25} strokeWidth={1} />
+              Desmarcar Todas
+            </button>
+          </div>
+          <div className="col-1"></div>
+        </div>
       </div>
+
 
       <footer className="footer mt-5 py-3">
         <div className="row flex-fill text-center align-self-baseline">

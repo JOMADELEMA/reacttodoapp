@@ -10,9 +10,9 @@ function Tarea(props) {
         className="list-group-item list-group-item-action d-flex rounded"
       >
         {tarea.estado === true ? (
-          <Square className="align-self-center" size={30} />
+          <Square className="align-self-center" size={30} strokeWidth={1} color={'#191c4d'} />
         ) : (
-          <SquareCheck className="align-self-center" size={30} />
+          <SquareCheck className="align-self-center" size={30} strokeWidth={1} color={'#191c4d'}/>
         )}
         <div
           className="align-self-center text-start ms-5 flex-fill"
