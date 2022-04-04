@@ -21,6 +21,8 @@ import {
   MantineProvider,
   ColorSchemeProvider,
   ColorScheme,
+  Container,
+  Input, Paper, Button, Text, Group, Center
 } from "@mantine/core";
 
 function App() {
@@ -43,27 +45,27 @@ function App() {
   var temp = contador;
 
   //funcion de Bootstrap para validar el formulario
-  (function () {
-    "use strict";
+  // (function () {
+  //   "use strict";
 
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll(".needs-validation");
+  //   Fetch all the forms we want to apply custom Bootstrap validation styles to
+  //   var forms = document.querySelectorAll(".needs-validation");
 
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(function (form) {
-      form.addEventListener(
-        "submit",
-        function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add("was-validated");
-        },
-        false
-      );
-    });
-  })();
+  //   Loop over them and prevent submission
+  //   Array.prototype.slice.call(forms).forEach(function (form) {
+  //     form.addEventListener(
+  //       "submit",
+  //       function (event) {
+  //         if (!form.checkValidity()) {
+  //           event.preventDefault();
+  //           event.stopPropagation();
+  //         }
+  //         form.classList.add("was-validated");
+  //       },
+  //       false
+  //     );
+  //   });
+  // })();
 
   /**Obtiene el valor del formulario y agrega la tarea al listado.
    *
@@ -242,8 +244,8 @@ function App() {
         <MantineProvider theme={{ colorScheme }} withGlobalStyles>
           <CambiarTema />
 
-          <div className="container text-center">
-            <h1 className="m-3">Tareas</h1>
+          <Container className="container text-center">
+            <Text><h1 className="m-3">Tareas</h1></Text>
 
             <div className="row mt-5 mb-3">
               <div className="col-1"></div>
@@ -253,18 +255,18 @@ function App() {
                   noValidate
                   onSubmit={agregarTarea}
                 >
-                  <div className="input-group mb-3 w-75">
-                    <input
+                  <Group className="mb-3 w-75">
+                    <Input className=""
                       type="text"
                       id="nuevaTarea"
                       className="form-control"
                       placeholder="Ingrese una Tarea"
                       required
                     />
-                    <button className="btn btn-outline-primary" type="submit">
+                    <Button className="" type="submit">
                       <Plus size={25} />
-                    </button>
-                  </div>
+                    </Button>
+                  </Group>
                 </form>
               </div>
               <div className="col-1"></div>
@@ -313,14 +315,14 @@ function App() {
                   {tareas.map((item) => (
                     <>
                       <div className="d-flex">
-                        <div
+                        <Paper
                           className="flex-fill"
                           onClick={() => {
                             completarTarea(item.id);
                           }}
                         >
                           <Tarea tarea={item} />
-                        </div>
+                        </Paper>
                         {/* <button
                       className="btn btn-outline-success"
                       onClick={() => {
@@ -370,7 +372,7 @@ function App() {
               </div>
               <div className="col-1"></div>
             </div>
-          </div>
+          </Container>
 
           <footer className="footer mt-5 py-3">
             <div className="row flex-fill text-center align-self-baseline">
