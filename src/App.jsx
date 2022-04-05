@@ -5,7 +5,7 @@ import {
   Check,
   Plus,
   Notes,
-  List,
+  List as IconoLista,
   ListCheck,
   ListDetails,
   Circle,
@@ -22,14 +22,24 @@ import {
   ColorSchemeProvider,
   ColorScheme,
   Container,
-  Input, Paper, Button, Text, Group, Center
+  Input,
+  Paper,
+  Button,
+  Text,
+  Group,
+  Center,
+  Grid,
+  InputWrapper,
+  List
 } from "@mantine/core";
 
 function App() {
+  const tareaPruebas = [{ id: 1, nombre: "tarea de prueba", estado: true }];
+
   //Estado para almacenar todas las tareas y mostrarlas
   //la tarea es un array de objetos que almacena id, nombre y estado
   //el estado es true para pendiente y false para completada
-  const [tareas, setTareas] = useState([]);
+  const [tareas, setTareas] = useState(tareaPruebas);
   const [tareasTemp, setTareasTemp] = useState([]);
   const [estadoLista, setEstadoLista] = useState(0); //se pondrán 3 valores 0 = todos, 1 = pendientes y 2 = completados
 
@@ -242,9 +252,241 @@ function App() {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider theme={{ colorScheme }} withGlobalStyles>
-          <CambiarTema />
 
-          <Container className="container text-center">
+
+          <Container>
+            <Text>
+              <Center>
+                <h1 className="m-3">React Todo App </h1>           <CambiarTema />
+              </Center>
+            </Text>
+
+            <Grid gutter="xs">
+              <Grid.Col span={1} justify="center" align="center"></Grid.Col>
+
+              <Grid.Col span={10} justify="center" align="center">
+                <InputWrapper>
+                  <Input placeholder="Ingrese una Tarea" size="md"></Input>
+                </InputWrapper>
+              </Grid.Col>
+
+              <Grid.Col span={1} justify="center" align="center">
+                <Button size="md" color="green">
+                  <Plus size={30} />
+                </Button>
+              </Grid.Col>
+            </Grid>
+          </Container>
+
+          <div className="container text-center">
+            {/* <div className="row mt-5 mb-3">
+              <div className="col-1"></div>
+              <div className="col-10">
+                <form
+                  className="needs-validation  d-flex justify-content-center"
+                  noValidate
+                  onSubmit={agregarTarea}
+                >
+                  <div className="mb-3 w-75">
+                    <input
+                      className=""
+                      type="text"
+                      id="nuevaTarea"
+                      className="form-control"
+                      placeholder="Ingrese una Tarea"
+                      required
+                    />
+                    <Button className="" type="submit">
+                      <Plus size={25} />
+                    </Button>
+                  </div>
+                </form>
+              </div>
+              <div className="col-1"></div>
+            </div> */}
+            <hr />
+
+            <Grid>
+              <Grid.Col span={1}> </Grid.Col>
+              <Grid.Col span={10}>
+                <Group position="apart">
+                  <Button size="md">
+                    <IconoLista size={25} /> Todas
+                  </Button>
+                  <Button color="green" size="md">
+                    <ListCheck size={25} /> Todas
+                  </Button>
+                  <Button color="red" size="md">
+                    <ListDetails size={25} /> Todas
+                  </Button>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={1}> </Grid.Col>
+            </Grid>
+            {/* <div className="row">
+              <div className="col-1"> </div>
+              <div className="col-10 d-flex justify-content-evenly">
+                <button
+                  className="btn btn-outline-primary align-self-center"
+                  onClick={() => {
+                    listarTareas();
+                  }}
+                >
+                  <List className="me-2" size={25} strokeWidth={1} />
+                  Todas
+                </button>
+                <button
+                  className="btn btn-outline-success align-self-center"
+                  onClick={() => {
+                    listarTareasCompletadas();
+                  }}
+                >
+                  <ListCheck className="me-2" size={25} strokeWidth={1} />
+                  Completadas
+                </button>
+                <button
+                  className="btn btn-outline-danger align-self-center"
+                  onClick={() => {
+                    listarTareasPendientes();
+                  }}
+                >
+                  <ListDetails className="me-2" size={25} strokeWidth={1} />
+                  Pendientes
+                </button>
+              </div>
+              <div className="col-1"> </div>
+            </div> */}
+
+            <hr />
+
+            <Grid>
+              <Grid.Col span={1}></Grid.Col>
+              <Grid.Col span={10}>
+                <List listStyleType="none">
+                  {tareas.map((item)=>(
+                    <Tarea tarea={item}/>
+                  ))}
+                </List>
+
+
+              </Grid.Col>
+              <Grid.Col span={1}></Grid.Col>
+            </Grid>
+
+
+            <div className="row">
+              <div className="col-1"></div>
+              <div className="col-10">
+                <ul className="list-group" id="listadoTareas">
+                  {tareas.map((item) => (
+                    <>
+                      <div className="d-flex">
+                        <Paper
+                          className="flex-fill"
+                          onClick={() => {
+                            completarTarea(item.id);
+                          }}
+                        >
+                          <Tarea tarea={item} />
+                        </Paper>
+                        {/* <button
+                      className="btn btn-outline-success"
+                      onClick={() => {
+                        completarTarea(item.id);
+                      }}
+                    >
+                      <Check size={25} />
+                    </button> */}
+                        <Button
+                          size="md"
+                          color="red"
+                          onClick={() => {
+                            eliminarTarea(item.id);
+                          }}
+                        >
+                          <X size={25} strokeWidth={1} />
+                        </Button>
+                      </div>
+                    </>
+                  ))}
+                </ul>
+              </div>
+              <div className="col-1"></div>
+            </div>
+
+            <Grid gutter="xs" className="mt-2">
+              <Grid.Col span={1}></Grid.Col>
+              <Grid.Col span={10}>
+                <Group position="center">
+                  <Button color="lime" size="md">
+                    <SquareCheck size={25} />
+                    Marcar Todas
+                  </Button>
+                  <Button color="gray" size="md">
+                    <Square size={25} />
+                    Desmarcar Todas
+                  </Button>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={1}></Grid.Col>
+            </Grid>
+
+            {/* <div className="row mt-5">
+              <div className="col-1"></div>
+              <div className="col-10 d-flex justify-content-evenly">
+                <button
+                  className="btn btn-outline-info align-self-center"
+                  onClick={() => {
+                    marcarTodasCompletas();
+                  }}
+                >
+                  <SquareCheck className="me-2" size={25} strokeWidth={1} />
+                  Marcar Todas
+                </button>
+                <button
+                  className="btn btn-outline-secondary align-self-center"
+                  onClick={() => {
+                    marcarTodasPendientes();
+                  }}
+                >
+                  <Square className="me-2" size={25} strokeWidth={1} />
+                  Desmarcar Todas
+                </button>
+              </div>
+              <div className="col-1"></div>
+            </div> */}
+          </div>
+
+          <footer className="footer mt-5 py-3">
+            <div className="row flex-fill text-center align-self-baseline">
+              <div className="col">
+                <h4>
+                  Tareas Totales:
+                  {tareas.length > 0 ? (
+                    <span className="text-danger fw-bold">{tareas.length}</span>
+                  ) : (
+                    <span className="text-success fw-bold">
+                      {tareas.length}
+                    </span>
+                  )}
+                </h4>
+              </div>
+              <div className="col">
+                <h4>
+                  Tareas Pendientes:
+                  {pendientes > 0 ? (
+                    <span className="text-danger fw-bold">{pendientes}</span>
+                  ) : (
+                    <span className="text-success fw-bold">{pendientes}</span>
+                  )}
+                </h4>
+              </div>
+            </div>
+          </footer>
+        </MantineProvider>
+      </ColorSchemeProvider>
+
+      {/* <div className="container text-center">
             <Text><h1 className="m-3">Tareas</h1></Text>
 
             <div className="row mt-5 mb-3">
@@ -255,8 +497,8 @@ function App() {
                   noValidate
                   onSubmit={agregarTarea}
                 >
-                  <Group className="mb-3 w-75">
-                    <Input className=""
+                  <div className="mb-3 w-75">
+                    <input className=""
                       type="text"
                       id="nuevaTarea"
                       className="form-control"
@@ -266,7 +508,7 @@ function App() {
                     <Button className="" type="submit">
                       <Plus size={25} />
                     </Button>
-                  </Group>
+                  </div>
                 </form>
               </div>
               <div className="col-1"></div>
@@ -331,7 +573,7 @@ function App() {
                     >
                       <Check size={25} />
                     </button> */}
-                        <button
+      {/* <button
                           className="btn btn-outline-danger"
                           onClick={() => {
                             eliminarTarea(item.id);
@@ -372,7 +614,7 @@ function App() {
               </div>
               <div className="col-1"></div>
             </div>
-          </Container>
+          </div>
 
           <footer className="footer mt-5 py-3">
             <div className="row flex-fill text-center align-self-baseline">
@@ -399,9 +641,7 @@ function App() {
                 </h4>
               </div>
             </div>
-          </footer>
-        </MantineProvider>
-      </ColorSchemeProvider>
+          </footer> */}
     </>
   );
 }

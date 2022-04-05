@@ -1,12 +1,63 @@
 import React from "react";
-import {Square, SquareCheck} from 'tabler-icons-react';
+import { ListItem, Paper } from "@mantine/core";
+import { Square, SquareCheck } from "tabler-icons-react";
 
 function Tarea(props) {
-
-    const {tarea} = props;
+  const { tarea } = props;
+  console.log(tarea);
   return (
     <>
-      <li
+      <ListItem>
+        <Paper shadow="xs" radius="xs" withBorder>
+          {tarea.estado === true ? (
+            <Square
+              className="align-self-center"
+              size={30}
+              strokeWidth={1}
+              color={"#191c4d"}
+            />
+          ) : (
+            <SquareCheck
+              className="align-self-center"
+              size={30}
+              strokeWidth={1}
+              color={"#191c4d"}
+            />
+          )}
+          <div
+            className="align-self-center text-start ms-5 flex-fill"
+            style={{ userSelect: "none" }}
+          >
+            {tarea.estado === true ? (
+              <span className="">{tarea.nombre}</span>
+            ) : (
+              <span className="text-decoration-line-through">
+                {tarea.nombre}
+              </span>
+            )}
+          </div>
+        </Paper>
+      </ListItem>
+      {/* <button
+          className="btn btn-outline-success"
+          onClick={() => {
+              console.log(tarea.id)
+            //completarTarea(tarea.id);
+          }}
+        >
+          Completada
+        </button>
+        <button
+          className="btn btn-outline-danger"
+          onClick={() => {
+              console.log(tarea.id)
+            // eliminarTarea(tarea.id);
+          }}
+        >
+          Eliminar
+        </button> */}
+
+      {/* <li
         className="list-group-item list-group-item-action d-flex rounded"
       >
         {tarea.estado === true ? (
@@ -46,7 +97,7 @@ function Tarea(props) {
         >
           Eliminar
         </button> */}
-      </li>
+      {/* </li> */}
     </>
   );
 }
