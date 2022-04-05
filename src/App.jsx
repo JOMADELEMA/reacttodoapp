@@ -30,7 +30,7 @@ import {
   Center,
   Grid,
   InputWrapper,
-  List
+  List,
 } from "@mantine/core";
 
 function App() {
@@ -252,12 +252,10 @@ function App() {
         toggleColorScheme={toggleColorScheme}
       >
         <MantineProvider theme={{ colorScheme }} withGlobalStyles>
-
-
           <Container>
             <Text>
               <Center>
-                <h1 className="m-3">React Todo App </h1>           <CambiarTema />
+                <h1 className="m-3">React Todo App </h1> <CambiarTema />
               </Center>
             </Text>
 
@@ -363,18 +361,20 @@ function App() {
               <Grid.Col span={1}></Grid.Col>
               <Grid.Col span={10}>
                 <List listStyleType="none">
-                  {tareas.map((item)=>(
-                    <Tarea tarea={item}/>
+                  {tareas.map((item) => (
+                    <div className="d-flex align-items-center">
+                      <Tarea tarea={item} />
+                      <Button color="red" size="md">
+                        <X />
+                      </Button>
+                    </div>
                   ))}
                 </List>
-
-
               </Grid.Col>
               <Grid.Col span={1}></Grid.Col>
             </Grid>
 
-
-            <div className="row">
+            {/* <div className="row">
               <div className="col-1"></div>
               <div className="col-10">
                 <ul className="list-group" id="listadoTareas">
@@ -397,7 +397,7 @@ function App() {
                     >
                       <Check size={25} />
                     </button> */}
-                        <Button
+            {/* <Button
                           size="md"
                           color="red"
                           onClick={() => {
@@ -412,7 +412,7 @@ function App() {
                 </ul>
               </div>
               <div className="col-1"></div>
-            </div>
+            </div> */}
 
             <Grid gutter="xs" className="mt-2">
               <Grid.Col span={1}></Grid.Col>
@@ -456,6 +456,30 @@ function App() {
               <div className="col-1"></div>
             </div> */}
           </div>
+
+          <Grid>
+            <Grid.Col span={6}>
+              <Text size="xl" weight={500} align="center">
+                Tareas Totales:
+              </Text>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Group>
+
+              <Text size="xl" weight={500} align="center" className="border" >
+                Tareas Pendientes:
+                
+              </Text>
+              <Text className="border">
+              {tareas.length > 0 ? (
+                  <span className="ms-3 text-danger fw-bold">{tareas.length}</span>
+                ) : (
+                  <span className="ms-3 text-success fw-bold">{tareas.length}</span>
+                )}
+              </Text>
+              </Group>
+            </Grid.Col>
+          </Grid>
 
           <footer className="footer mt-5 py-3">
             <div className="row flex-fill text-center align-self-baseline">

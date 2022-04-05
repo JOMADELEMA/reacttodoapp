@@ -7,31 +7,26 @@ function Tarea(props) {
   console.log(tarea);
   return (
     <>
-      <ListItem>
-        <Paper shadow="xs" radius="xs" withBorder>
-          {tarea.estado === true ? (
-            <Square
-              className="align-self-center"
-              size={30}
-              strokeWidth={1}
-              color={"#191c4d"}
-            />
-          ) : (
-            <SquareCheck
-              className="align-self-center"
-              size={30}
-              strokeWidth={1}
-              color={"#191c4d"}
-            />
-          )}
+      <ListItem className="flex-fill">
+        <Paper shadow="sm" radius="md" withBorder style={{height: 45}} className="d-flex align-items-center">
           <div
-            className="align-self-center text-start ms-5 flex-fill"
+            className=" text-start ms-2 flex-fill"
             style={{ userSelect: "none" }}
           >
             {tarea.estado === true ? (
-              <span className="">{tarea.nombre}</span>
+              <Square className="align-self-center" size={30} strokeWidth={1} />
             ) : (
-              <span className="text-decoration-line-through">
+              <SquareCheck
+                className="align-self-center"
+                size={30}
+                strokeWidth={1}
+              />
+            )}
+
+            {tarea.estado === true ? (
+              <span className="ms-3 align-self-center">{tarea.nombre}</span>
+            ) : (
+              <span className="ms-3 align-self-center text-decoration-line-through">
                 {tarea.nombre}
               </span>
             )}
