@@ -42,7 +42,9 @@ function App() {
   //el estado es true para pendiente y false para completada
   const [tareas, setTareas] = useState([]);
   const [tareasTemp, setTareasTemp] = useState([]);
+
   const [estadoLista, setEstadoLista] = useState(0); //se pondrán 3 valores 0 = todos, 1 = pendientes y 2 = completados
+  //let estadoLista = 0;
 
   const [colorScheme, setColorScheme] = useState("dark");
 
@@ -55,28 +57,6 @@ function App() {
   const [pendientes, setPendientes] = useState(0); //contador de tareas pendientes para el listado de pendientes
   var temp = contador;
 
-  //funcion de Bootstrap para validar el formulario
-  // (function () {
-  //   "use strict";
-
-  //  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  //   var forms = document.querySelectorAll(".needs-validation");
-
-  //   //Loop over them and prevent submission
-  //   Array.prototype.slice.call(forms).forEach(function (form) {
-  //     form.addEventListener(
-  //       "submit",
-  //       function (event) {
-  //         if (!form.checkValidity()) {
-  //           event.preventDefault();
-  //           event.stopPropagation();
-  //         }
-  //         form.classList.add("was-validated");
-  //       },
-  //       false
-  //     );
-  //   });
-  // })();
 
   /**Obtiene el valor del formulario y agrega la tarea al listado.
    *
@@ -101,8 +81,15 @@ function App() {
       document.querySelector("input[name='inputAgregarTarea']").value = "";
       //document.getElementById("inputAgregar").value = "";
       actualizarPendientes(true);
+      // calcularPendientes();
     }
   };
+
+  // const calcularPendientes = () => {
+  //   var listado = tareas.filter((tarea) => tarea.estado === true);
+  //  setPendientes(listado.length);
+  //   //console.log(listado.length);
+  // };
 
   /**
    *funcion para eliminar la tarea del listado, recibe el id de la tarea que se quiere eliminar
@@ -114,11 +101,13 @@ function App() {
     setTareas(nuevoListado);
     if (estadoLista === 0) {
       setTareasTemp(nuevoListado);
+      actualizarPendientes(true)
     }
 
     let estadoTarea = verificarEstadoTarea(idTarea);
     if (estadoTarea === true) {
       actualizarPendientes(false);
+      
     }
   }
 
@@ -135,10 +124,12 @@ function App() {
       if (item.id === tareaCompletada[0].id) {
         if (item.estado === true) {
           item.estado = false;
+          //calcularPendientes();
           actualizarPendientes(false);
         } else {
           item.estado = true;
-          actualizarPendientes(true);
+          //calcularPendientes();
+            actualizarPendientes(true);
         }
       }
     });
@@ -146,33 +137,37 @@ function App() {
 
   function marcarTodasCompletas() {
     let tareasTemporal = tareas;
-    //setTareas(tareasSinCompletada);
-    //console.log(idTarea);
 
     tareasTemporal.map((item) => {
       if (item.estado === true) {
         item.estado = false;
-        actualizarPendientes(false);
+        setPendientes(0);
+       // calcularPendientes();
+        //actualizarPendientes(false);
       }
       // else {
       //   item.estado = true;
-      //   actualizarPendientes(true);
+      //   //actualizarPendientes(true);
+      //   setPendientes(tareasTemporal.length);
       // }
     });
   }
+
   function marcarTodasPendientes() {
     let tareasTemporal = tareas;
     //setTareas(tareasSinCompletada);
     //console.log(idTarea);
 
-    tareasTemporal.map((item) => {
+    tareasTemporal.map((item) =>{
       if (item.estado === false) {
         item.estado = true;
-        actualizarPendientes(true);
+        setPendientes(tareasTemporal.length)
+        //actualizarPendientes(true);
       }
       // else {
       //   item.estado = false;
-      //   actualizarPendientes(false);
+      //   setPendientes(0);
+      //   //actualizarPendientes(false);
       // }
     });
   }
@@ -395,40 +390,48 @@ function App() {
 
           <Grid className="mt-3">
             <Grid.Col span={6} align="center">
-              
-                <Text size="lg" weight={500}>
-                  Tareas Totales:
-                </Text>
-                <Text>
-                  {tareas.length > 0 ? (
-                    <span className="ms-3 text-danger fw-bold">
-                      {tareas.length}
-                    </span>
-                  ) : (
-                    <span className="ms-3 text-success fw-bold">
-                      {tareas.length}
-                    </span>
-                  )}
-                </Text>
-              
+              <Text size="lg" weight={500}>
+                Tareas Totales:
+              </Text>
+              <Text>
+                {tareas.length > 0 ? (
+                  <span
+                    className="ms-3 text-danger fw-bold"
+                    style={{ fontSize: 35 }}
+                  >
+                    {tareas.length}
+                  </span>
+                ) : (
+                  <span
+                    className="ms-3 text-success fw-bold"
+                    style={{ fontSize: 35 }}
+                  >
+                    {tareas.length}
+                  </span>
+                )}
+              </Text>
             </Grid.Col>
             <Grid.Col span={6} align="center">
-              
-                <Text size="lg" weight={500}>
-                  Tareas Pendientes:
-                </Text>
-                <Text className="">
-                  {pendientes > 0 ? (
-                    <span className="ms-3 text-danger fw-bold">
-                      {pendientes}
-                    </span>
-                  ) : (
-                    <span className="ms-3 text-success fw-bold">
-                      {pendientes}
-                    </span>
-                  )}
-                </Text>
-              
+              <Text size="lg" weight={500}>
+                Tareas Pendientes:
+              </Text>
+              <Text className="">
+                {pendientes > 0 ? (
+                  <Text
+                    className="ms-3 text-danger fw-bold"
+                    style={{ fontSize: 35 }}
+                  >
+                    {pendientes}
+                  </Text>
+                ) : (
+                  <Text
+                    className="ms-3 text-success fw-bold"
+                    style={{ fontSize: 35 }}
+                  >
+                    {pendientes}
+                  </Text>
+                )}
+              </Text>
             </Grid.Col>
           </Grid>
         </MantineProvider>

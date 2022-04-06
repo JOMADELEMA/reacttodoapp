@@ -4,7 +4,7 @@ import { Square, SquareCheck } from "tabler-icons-react";
 
 function Tarea(props) {
   const { tarea } = props;
-  console.log(tarea);
+  //console.log(tarea);
   return (
     <>
       <ListItem className="flex-fill">
