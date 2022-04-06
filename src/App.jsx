@@ -31,15 +31,16 @@ import {
   Grid,
   InputWrapper,
   List,
+  ActionIcon,
 } from "@mantine/core";
 
 function App() {
-  const tareaPruebas = [{ id: 1, nombre: "tarea de prueba", estado: true }];
+  //const tareaPruebas = [{ id: 1, nombre: "tarea de prueba", estado: true }];
 
   //Estado para almacenar todas las tareas y mostrarlas
   //la tarea es un array de objetos que almacena id, nombre y estado
   //el estado es true para pendiente y false para completada
-  const [tareas, setTareas] = useState(tareaPruebas);
+  const [tareas, setTareas] = useState([]);
   const [tareasTemp, setTareasTemp] = useState([]);
   const [estadoLista, setEstadoLista] = useState(0); //se pondrán 3 valores 0 = todos, 1 = pendientes y 2 = completados
 
@@ -58,10 +59,10 @@ function App() {
   // (function () {
   //   "use strict";
 
-  //   Fetch all the forms we want to apply custom Bootstrap validation styles to
+  //  // Fetch all the forms we want to apply custom Bootstrap validation styles to
   //   var forms = document.querySelectorAll(".needs-validation");
 
-  //   Loop over them and prevent submission
+  //   //Loop over them and prevent submission
   //   Array.prototype.slice.call(forms).forEach(function (form) {
   //     form.addEventListener(
   //       "submit",
@@ -82,10 +83,11 @@ function App() {
    * @param {string} e
    */
 
-  const agregarTarea = (e) => {
-    e.preventDefault();
+  const agregarTarea = () => {
+    const formTarea = document.querySelector(
+      "input[name='inputAgregarTarea']"
+    ).value; //valor obtenido del Input
 
-    const formTarea = e.target[0].value; //valor obtenido del formulario
     if (formTarea === "") {
       console.log("input vacio"); //verificar por que no valida cuando se hace el primer insert a la lista
     } else {
@@ -96,7 +98,8 @@ function App() {
       ]);
       temp++;
       setContador(temp);
-      document.getElementById("nuevaTarea").value = "";
+      document.querySelector("input[name='inputAgregarTarea']").value = "";
+      //document.getElementById("inputAgregar").value = "";
       actualizarPendientes(true);
     }
   };
@@ -264,12 +267,24 @@ function App() {
 
               <Grid.Col span={10} justify="center" align="center">
                 <InputWrapper>
-                  <Input placeholder="Ingrese una Tarea" size="md"></Input>
+                  <Input
+                    placeholder="Ingrese una Tarea"
+                    size="md"
+                    name="inputAgregarTarea"
+                    id="inputAgregar"
+                    className="needs-validation"
+                  ></Input>
                 </InputWrapper>
               </Grid.Col>
 
               <Grid.Col span={1} justify="center" align="center">
-                <Button size="md" color="green">
+                <Button
+                  size="md"
+                  color="green"
+                  onClick={() => {
+                    agregarTarea();
+                  }}
+                >
                   <Plus size={30} />
                 </Button>
               </Grid.Col>
@@ -277,83 +292,42 @@ function App() {
           </Container>
 
           <div className="container text-center">
-            {/* <div className="row mt-5 mb-3">
-              <div className="col-1"></div>
-              <div className="col-10">
-                <form
-                  className="needs-validation  d-flex justify-content-center"
-                  noValidate
-                  onSubmit={agregarTarea}
-                >
-                  <div className="mb-3 w-75">
-                    <input
-                      className=""
-                      type="text"
-                      id="nuevaTarea"
-                      className="form-control"
-                      placeholder="Ingrese una Tarea"
-                      required
-                    />
-                    <Button className="" type="submit">
-                      <Plus size={25} />
-                    </Button>
-                  </div>
-                </form>
-              </div>
-              <div className="col-1"></div>
-            </div> */}
             <hr />
 
             <Grid>
               <Grid.Col span={1}> </Grid.Col>
               <Grid.Col span={10}>
-                <Group position="apart">
-                  <Button size="md">
+                <Group position="center">
+                  <Button
+                    size="md"
+                    onClick={() => {
+                      listarTareas();
+                    }}
+                  >
                     <IconoLista size={25} /> Todas
                   </Button>
-                  <Button color="green" size="md">
-                    <ListCheck size={25} /> Todas
+                  <Button
+                    color="green"
+                    size="md"
+                    onClick={() => {
+                      listarTareasCompletadas();
+                    }}
+                  >
+                    <ListCheck size={25} /> Completadas
                   </Button>
-                  <Button color="red" size="md">
-                    <ListDetails size={25} /> Todas
+                  <Button
+                    color="red"
+                    size="md"
+                    onClick={() => {
+                      listarTareasPendientes();
+                    }}
+                  >
+                    <ListDetails size={25} /> Pendientes
                   </Button>
                 </Group>
               </Grid.Col>
               <Grid.Col span={1}> </Grid.Col>
             </Grid>
-            {/* <div className="row">
-              <div className="col-1"> </div>
-              <div className="col-10 d-flex justify-content-evenly">
-                <button
-                  className="btn btn-outline-primary align-self-center"
-                  onClick={() => {
-                    listarTareas();
-                  }}
-                >
-                  <List className="me-2" size={25} strokeWidth={1} />
-                  Todas
-                </button>
-                <button
-                  className="btn btn-outline-success align-self-center"
-                  onClick={() => {
-                    listarTareasCompletadas();
-                  }}
-                >
-                  <ListCheck className="me-2" size={25} strokeWidth={1} />
-                  Completadas
-                </button>
-                <button
-                  className="btn btn-outline-danger align-self-center"
-                  onClick={() => {
-                    listarTareasPendientes();
-                  }}
-                >
-                  <ListDetails className="me-2" size={25} strokeWidth={1} />
-                  Pendientes
-                </button>
-              </div>
-              <div className="col-1"> </div>
-            </div> */}
 
             <hr />
 
@@ -363,10 +337,25 @@ function App() {
                 <List listStyleType="none">
                   {tareas.map((item) => (
                     <div className="d-flex align-items-center">
-                      <Tarea tarea={item} />
-                      <Button color="red" size="md">
-                        <X />
-                      </Button>
+                      <div
+                        className="flex-fill"
+                        onClick={() => {
+                          completarTarea(item.id);
+                        }}
+                      >
+                        <Tarea tarea={item} />
+                      </div>
+                      <ActionIcon
+                        color="red"
+                        size="xl"
+                        radius="md"
+                        className="ms-2"
+                        onClick={() => {
+                          eliminarTarea(item.id);
+                        }}
+                      >
+                        <X size={25} />
+                      </ActionIcon>
                     </div>
                   ))}
                 </List>
@@ -374,55 +363,27 @@ function App() {
               <Grid.Col span={1}></Grid.Col>
             </Grid>
 
-            {/* <div className="row">
-              <div className="col-1"></div>
-              <div className="col-10">
-                <ul className="list-group" id="listadoTareas">
-                  {tareas.map((item) => (
-                    <>
-                      <div className="d-flex">
-                        <Paper
-                          className="flex-fill"
-                          onClick={() => {
-                            completarTarea(item.id);
-                          }}
-                        >
-                          <Tarea tarea={item} />
-                        </Paper>
-                        {/* <button
-                      className="btn btn-outline-success"
-                      onClick={() => {
-                        completarTarea(item.id);
-                      }}
-                    >
-                      <Check size={25} />
-                    </button> */}
-            {/* <Button
-                          size="md"
-                          color="red"
-                          onClick={() => {
-                            eliminarTarea(item.id);
-                          }}
-                        >
-                          <X size={25} strokeWidth={1} />
-                        </Button>
-                      </div>
-                    </>
-                  ))}
-                </ul>
-              </div>
-              <div className="col-1"></div>
-            </div> */}
-
             <Grid gutter="xs" className="mt-2">
               <Grid.Col span={1}></Grid.Col>
               <Grid.Col span={10}>
                 <Group position="center">
-                  <Button color="lime" size="md">
+                  <Button
+                    color="lime"
+                    size="md"
+                    onClick={() => {
+                      marcarTodasCompletas();
+                    }}
+                  >
                     <SquareCheck size={25} />
                     Marcar Todas
                   </Button>
-                  <Button color="gray" size="md">
+                  <Button
+                    color="gray"
+                    size="md"
+                    onClick={() => {
+                      marcarTodasPendientes();
+                    }}
+                  >
                     <Square size={25} />
                     Desmarcar Todas
                   </Button>
@@ -430,242 +391,48 @@ function App() {
               </Grid.Col>
               <Grid.Col span={1}></Grid.Col>
             </Grid>
-
-            {/* <div className="row mt-5">
-              <div className="col-1"></div>
-              <div className="col-10 d-flex justify-content-evenly">
-                <button
-                  className="btn btn-outline-info align-self-center"
-                  onClick={() => {
-                    marcarTodasCompletas();
-                  }}
-                >
-                  <SquareCheck className="me-2" size={25} strokeWidth={1} />
-                  Marcar Todas
-                </button>
-                <button
-                  className="btn btn-outline-secondary align-self-center"
-                  onClick={() => {
-                    marcarTodasPendientes();
-                  }}
-                >
-                  <Square className="me-2" size={25} strokeWidth={1} />
-                  Desmarcar Todas
-                </button>
-              </div>
-              <div className="col-1"></div>
-            </div> */}
           </div>
 
-          <Grid>
-            <Grid.Col span={6}>
-              <Text size="xl" weight={500} align="center">
-                Tareas Totales:
-              </Text>
+          <Grid className="mt-3">
+            <Grid.Col span={6} align="center">
+              
+                <Text size="lg" weight={500}>
+                  Tareas Totales:
+                </Text>
+                <Text>
+                  {tareas.length > 0 ? (
+                    <span className="ms-3 text-danger fw-bold">
+                      {tareas.length}
+                    </span>
+                  ) : (
+                    <span className="ms-3 text-success fw-bold">
+                      {tareas.length}
+                    </span>
+                  )}
+                </Text>
+              
             </Grid.Col>
-            <Grid.Col span={6}>
-              <Group>
-
-              <Text size="xl" weight={500} align="center" className="border" >
-                Tareas Pendientes:
-                
-              </Text>
-              <Text className="border">
-              {tareas.length > 0 ? (
-                  <span className="ms-3 text-danger fw-bold">{tareas.length}</span>
-                ) : (
-                  <span className="ms-3 text-success fw-bold">{tareas.length}</span>
-                )}
-              </Text>
-              </Group>
+            <Grid.Col span={6} align="center">
+              
+                <Text size="lg" weight={500}>
+                  Tareas Pendientes:
+                </Text>
+                <Text className="">
+                  {pendientes > 0 ? (
+                    <span className="ms-3 text-danger fw-bold">
+                      {pendientes}
+                    </span>
+                  ) : (
+                    <span className="ms-3 text-success fw-bold">
+                      {pendientes}
+                    </span>
+                  )}
+                </Text>
+              
             </Grid.Col>
           </Grid>
-
-          <footer className="footer mt-5 py-3">
-            <div className="row flex-fill text-center align-self-baseline">
-              <div className="col">
-                <h4>
-                  Tareas Totales:
-                  {tareas.length > 0 ? (
-                    <span className="text-danger fw-bold">{tareas.length}</span>
-                  ) : (
-                    <span className="text-success fw-bold">
-                      {tareas.length}
-                    </span>
-                  )}
-                </h4>
-              </div>
-              <div className="col">
-                <h4>
-                  Tareas Pendientes:
-                  {pendientes > 0 ? (
-                    <span className="text-danger fw-bold">{pendientes}</span>
-                  ) : (
-                    <span className="text-success fw-bold">{pendientes}</span>
-                  )}
-                </h4>
-              </div>
-            </div>
-          </footer>
         </MantineProvider>
       </ColorSchemeProvider>
-
-      {/* <div className="container text-center">
-            <Text><h1 className="m-3">Tareas</h1></Text>
-
-            <div className="row mt-5 mb-3">
-              <div className="col-1"></div>
-              <div className="col-10">
-                <form
-                  className="needs-validation  d-flex justify-content-center"
-                  noValidate
-                  onSubmit={agregarTarea}
-                >
-                  <div className="mb-3 w-75">
-                    <input className=""
-                      type="text"
-                      id="nuevaTarea"
-                      className="form-control"
-                      placeholder="Ingrese una Tarea"
-                      required
-                    />
-                    <Button className="" type="submit">
-                      <Plus size={25} />
-                    </Button>
-                  </div>
-                </form>
-              </div>
-              <div className="col-1"></div>
-            </div>
-            <hr />
-
-            <div className="row">
-              <div className="col-1"> </div>
-              <div className="col-10 d-flex justify-content-evenly">
-                <button
-                  className="btn btn-outline-primary align-self-center"
-                  onClick={() => {
-                    listarTareas();
-                  }}
-                >
-                  <List className="me-2" size={25} strokeWidth={1} />
-                  Todas
-                </button>
-                <button
-                  className="btn btn-outline-success align-self-center"
-                  onClick={() => {
-                    listarTareasCompletadas();
-                  }}
-                >
-                  <ListCheck className="me-2" size={25} strokeWidth={1} />
-                  Completadas
-                </button>
-                <button
-                  className="btn btn-outline-danger align-self-center"
-                  onClick={() => {
-                    listarTareasPendientes();
-                  }}
-                >
-                  <ListDetails className="me-2" size={25} strokeWidth={1} />
-                  Pendientes
-                </button>
-              </div>
-              <div className="col-1"> </div>
-            </div>
-
-            <hr />
-            <div className="row">
-              <div className="col-1"></div>
-              <div className="col-10">
-                <ul className="list-group" id="listadoTareas">
-                  {tareas.map((item) => (
-                    <>
-                      <div className="d-flex">
-                        <Paper
-                          className="flex-fill"
-                          onClick={() => {
-                            completarTarea(item.id);
-                          }}
-                        >
-                          <Tarea tarea={item} />
-                        </Paper>
-                        {/* <button
-                      className="btn btn-outline-success"
-                      onClick={() => {
-                        completarTarea(item.id);
-                      }}
-                    >
-                      <Check size={25} />
-                    </button> */}
-      {/* <button
-                          className="btn btn-outline-danger"
-                          onClick={() => {
-                            eliminarTarea(item.id);
-                          }}
-                        >
-                          {" "}
-                          <X size={25} strokeWidth={1} />
-                        </button>
-                      </div>
-                    </>
-                  ))}
-                </ul>
-              </div>
-              <div className="col-1"></div>
-            </div>
-
-            <div className="row mt-5">
-              <div className="col-1"></div>
-              <div className="col-10 d-flex justify-content-evenly">
-                <button
-                  className="btn btn-outline-info align-self-center"
-                  onClick={() => {
-                    marcarTodasCompletas();
-                  }}
-                >
-                  <SquareCheck className="me-2" size={25} strokeWidth={1} />
-                  Marcar Todas
-                </button>
-                <button
-                  className="btn btn-outline-secondary align-self-center"
-                  onClick={() => {
-                    marcarTodasPendientes();
-                  }}
-                >
-                  <Square className="me-2" size={25} strokeWidth={1} />
-                  Desmarcar Todas
-                </button>
-              </div>
-              <div className="col-1"></div>
-            </div>
-          </div>
-
-          <footer className="footer mt-5 py-3">
-            <div className="row flex-fill text-center align-self-baseline">
-              <div className="col">
-                <h4>
-                  Tareas Totales:
-                  {tareas.length > 0 ? (
-                    <span className="text-danger fw-bold">{tareas.length}</span>
-                  ) : (
-                    <span className="text-success fw-bold">
-                      {tareas.length}
-                    </span>
-                  )}
-                </h4>
-              </div>
-              <div className="col">
-                <h4>
-                  Tareas Pendientes:
-                  {pendientes > 0 ? (
-                    <span className="text-danger fw-bold">{pendientes}</span>
-                  ) : (
-                    <span className="text-success fw-bold">{pendientes}</span>
-                  )}
-                </h4>
-              </div>
-            </div>
-          </footer> */}
     </>
   );
 }
